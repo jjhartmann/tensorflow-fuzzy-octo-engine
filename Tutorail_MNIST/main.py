@@ -1,12 +1,17 @@
 ## Import Tensorflow
 import tensorflow as tf
 
+from tensorflow.python import debug as tf_debug
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data", one_hot=True)
 
 
 # Create session
 sess = tf.InteractiveSession()
+
+# Set up debug
+sess = tf_debug.LocalCLIDebugWrapperSession(sess)
+
 
 # Placeholders
 x = tf.placeholder(tf.float32, shape=[None, 784])
@@ -19,12 +24,12 @@ b = tf.Variable(tf.zeros([10]))
 # Register Variables in Computational Graph
 sess.run(tf.global_variables_initializer())
 
+
 # Regression Model
 y = tf.matmul(x, W) + b
 
 # Cross entropy loss function
 cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
-
 
 # Training
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
